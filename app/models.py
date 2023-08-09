@@ -1,8 +1,6 @@
 from django.db import models
 
 # Create your models here.
-<<<<<<< HEAD
-=======
 from django.db import models
 
 # class Category(models.Model):
@@ -59,4 +57,3 @@ class File_store(models.Model):
     type_of = models.CharField(max_length=15,default='Image',choices=[("Image","Image"),("Music","Music"),("Notification","Notification")])
     parent_category = models.ForeignKey(Categories,null=True, on_delete=models.CASCADE,blank=True)
     File = models.FileField(upload_to="files/",blank=True,null=True)
->>>>>>> 42730824292b9cc53d66012571fc521759564095

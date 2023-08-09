@@ -1,8 +1,6 @@
 from django.shortcuts import render
 
 # Create your views here.
-<<<<<<< HEAD
-=======
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -28,4 +26,3 @@ def first_API(request):
 # class ProductViewSet(viewsets.ModelViewSet):
 #     queryset = Product.objects.all()
 #     serializer_class = ProductSerializer
->>>>>>> 42730824292b9cc53d66012571fc521759564095
