@@ -1,28 +1,26 @@
 from django.shortcuts import render
-
-# Create your views here.
-from rest_framework import viewsets
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from .models import *
 
-@api_view(['GET'])
-def first_API(request):
-    return Response({"Status":1,"msg":"Success"})
-# from .models import Category, Subcategory, Brand, Product
-# from .serializers import CategorySerializer, SubcategorySerializer, BrandSerializer, ProductSerializer
+# Create your views here.
 
-# class CategoryViewSet(viewsets.ModelViewSet):
-#     queryset = Category.objects.all()
-#     serializer_class = CategorySerializer
+@api_view(["GET"])
+def home_page_api(request):
+    '''
+     API For the Home Page to displayed the all images and Files.
+    '''
+    recommended_image = File_store.objects.filter(Recommended="Yes")
+    List_of_image = []
+    for arr in recommended_image:
+        array_object = {}
+        array_object['id'] = arr.id
+        array_object['type_of'] = arr.type_of
+        array_object['parent_category'] = arr.parent_category.name
+        array_object['File'] = arr.file_view if arr.file_view.url else ''
+        array_object['Recommended'] = arr.Recommended
+        List_of_image.append(array_object)
 
-# class SubcategoryViewSet(viewsets.ModelViewSet):
-#     queryset = Subcategory.objects.all()
-#     serializer_class = SubcategorySerializer
 
-# class BrandViewSet(viewsets.ModelViewSet):
-#     queryset = Brand.objects.all()
-#     serializer_class = BrandSerializer
-
-# class ProductViewSet(viewsets.ModelViewSet):
-#     queryset = Product.objects.all()
-#     serializer_class = ProductSerializer
+    return Response({'status':1,"status_Msg": "Successful","data":List_of_image} ,status=status.HTTP_200_OK)
