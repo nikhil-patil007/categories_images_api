@@ -10,7 +10,7 @@ class Categoriesadmin(admin.ModelAdmin):
     ordering = ('-id'),
     search_fields = ('name','Resolution','parent_category')
     
-class FileStoreadmin(admin.ModelAdmin):
+class DataStorageadmin(admin.ModelAdmin):
     # model = Files Store
     list_per_page = 15 # No of records per page 
     list_display = ('id','type_of','parent_category','file_view','Recommended')
@@ -21,7 +21,7 @@ class FileStoreadmin(admin.ModelAdmin):
 
 
 admin.site.register(Categories,Categoriesadmin)
-admin.site.register(File_store,FileStoreadmin)
+admin.site.register(DataStorage,DataStorageadmin)
 admin.site.register(Resolutions)
 
 # ABCD!123

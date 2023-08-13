@@ -6,6 +6,7 @@ class Resolutions(models.Model):
     
     def __str__(self):
         return f"{self.resolution}"
+        
 class Categories(models.Model):
     name = models.CharField(max_length=25)
     Resolution = models.ForeignKey('Resolutions',null=True, on_delete=models.CASCADE,blank=True)
@@ -18,8 +19,14 @@ class Categories(models.Model):
             return f"{self.name}"
 
 
-class File_store(models.Model):
+class DataStorage(models.Model):
     type_of = models.CharField(max_length=15,default='Image',choices=[("Image","Image"),("Music","Music"),("Notification","Notification")])
     parent_category = models.ForeignKey(Categories,null=True, on_delete=models.CASCADE,blank=True)
-    file_view = models.FileField(upload_to="categories/files/",blank=True,null=True)
-    Recommended = models.CharField(max_length=15,default='Yes',choices=[("Yes","Yes"),("No","No")])
+    file_view = models.FileField(upload_to="files/%Y%m%d/%H%M%S/",blank=True,null=True)
+    file_url = models.CharField(max_length=255,blank=True,null=True)
+    Recommended = models.CharField(max_length=15,default='No',choices=[("Yes","Yes"),("No","No")])
+
+    def __str__(self):
+        self.file_url = self.file_view.url
+        self.save() 
+        return f"{self.type_of} for {self.parent_category} category" 
