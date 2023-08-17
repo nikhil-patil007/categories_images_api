@@ -6,7 +6,7 @@ from .models import *
 
 # Create your views here.
 
-def List_for_data_store(values):
+def List_for_data_store(values,favorite):
     List_of_data = list()
     for arr in values:
         array_object = dict()
@@ -14,28 +14,35 @@ def List_for_data_store(values):
         array_object["type_of"] = arr.parent_category.type_of
         array_object["parent_category"] = arr.parent_category.name
         array_object["File"] = arr.file_url
-        array_object["Recommended"] = arr.Recommended
         array_object["resolutions"] = arr.parent_category.Resolution.resolution
+        array_object["Recommended"] = arr.Recommended
+        for fav in favorite:
+            if fav.image_id.id == arr.id:
+                array_object["favorite"] = 'Yes'
+            else:
+                array_object["favorite"] = 'No'
         List_of_data.append(array_object)
 
     return List_of_data
 
 @api_view(["GET"])
-def get_all_images(request):
+def get_all_images(request,deviceId):
     '''
      API For the Home Page to displayed the all images and Files.
     '''
     recommended_image = DataStorage.objects.all()
-    List_of_image = List_for_data_store(recommended_image)
+    getFavorite = Favorite.objects.filter(device_id = deviceId)
+    List_of_image = List_for_data_store(recommended_image,getFavorite)
     return Response({"status_code":1,"status_Msg": "Successful","data":List_of_image} ,status=status.HTTP_200_OK)
 
 @api_view(["GET"])
-def get_all_recommended_Imaging_list(request):
+def get_all_recommended_Imaging_list(request,deviceId):
     '''
      API For the Home Page to displayed the recommended images and Files.
     '''
     recommended_image = DataStorage.objects.filter(Recommended="Yes")
-    List_of_image = List_for_data_store(recommended_image)
+    getFavorite = Favorite.objects.filter(device_id = deviceId)
+    List_of_image = List_for_data_store(recommended_image,getFavorite)
     return Response({"status_code":1,"status_Msg": "Successful","data":List_of_image} ,status=status.HTTP_200_OK)
 
 @api_view(['GET'])
@@ -126,22 +133,24 @@ def get_sub_categories(request,getId):
 
 
 @api_view(['GET'])
-def list_of_images_based_on_category(request,subCategory):
+def list_of_images_based_on_category(request,subCategory,deviceId):
     '''
     Get the List of Images and files based on the category
     '''
     recommended_image = DataStorage.objects.filter(parent_category=subCategory)
-    List_of_image = List_for_data_store(recommended_image)
+    getFavorite = Favorite.objects.filter(device_id = deviceId)
+    List_of_image = List_for_data_store(recommended_image,getFavorite)
     return Response({"status_code":1,"status_Msg": "Successful","data":List_of_image} ,status=status.HTTP_200_OK)
 
 @api_view(['GET'])
-def list_of_images_based_on_resolution(request,resolution):
+def list_of_images_based_on_resolution(request,resolution,deviceId):
     '''
     Get list of all image based on Resolutions.
     '''
 
     resolution_Image = DataStorage.objects.filter(Resolution=resolution)
-    List_of_image = List_for_data_store(resolution_Image)
+    getFavorite = Favorite.objects.filter(device_id = deviceId)
+    List_of_image = List_for_data_store(resolution_Image,getFavorite)
     return Response({"status_code":1,"status_Msg": "Successful","data":List_of_image} ,status=status.HTTP_200_OK)
 
 @api_view(['POST'])
