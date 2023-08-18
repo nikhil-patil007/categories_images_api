@@ -16,11 +16,11 @@ def List_for_data_store(values,favorite):
         array_object["File"] = arr.file_url
         array_object["resolutions"] = arr.parent_category.Resolution.resolution
         array_object["Recommended"] = arr.Recommended
+        array_object["favorite"] = 'No'
         for fav in favorite:
             if fav.image_id.id == arr.id:
                 array_object["favorite"] = 'Yes'
-            else:
-                array_object["favorite"] = 'No'
+            
         List_of_data.append(array_object)
 
     return List_of_data
